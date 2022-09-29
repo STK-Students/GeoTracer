@@ -9,9 +9,11 @@ geschwindigkeit sollen angezeigt werden, die Strecke auf einer Karte).
 - XML (Benutzeroberfläche)
   - 2 Aktivitäten
   - Kommunikation zwischen den Aktivitäten
-- Java (Anwendungslogik
-  - Sensornutzung (GPS, Temperatur)
-  - Gerät (Kameralicht)
-- Datenbank (SQLlite)
+- Java (Anwendungslogik)
+  - Erfassung Points via GPS Sensor
+  - Visualisierung Points auf Karte - *Lars*
+- Datenbank (SQLlite) - *Moritz*
+
+- Alle zusammen:
 - Dokumentation
 - Präsentation
