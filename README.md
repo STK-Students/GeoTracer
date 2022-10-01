@@ -12,7 +12,7 @@ geschwindigkeit sollen angezeigt werden, die Strecke auf einer Karte).
 - Java (Anwendungslogik)
   - Erfassung Points via GPS Sensor
   - Visualisierung Points auf Karte - *Lars*
-- Datenbank (SQLlite) - *Moritz*
+- Datenbank (SQLlite - SpatiaLite) - *Moritz*
 
 - Alle zusammen:
 - Dokumentation
