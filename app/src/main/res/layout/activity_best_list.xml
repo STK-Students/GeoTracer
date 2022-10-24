@@ -4,6 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:label="Bestenliste"
     tools:context=".BestList">
 
+
+    <ListView
+        android:id="@+id/listview_best_list"
+        android:layout_width="246dp"
+        android:layout_height="449dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_bestlist"
+        android:layout_width="207dp"
+        android:layout_height="49dp"
+        android:text="Bestenliste"
+        app:layout_constraintBottom_toTopOf="@+id/listview_best_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
