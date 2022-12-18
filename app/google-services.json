@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "850287877102",
+    "project_id": "geotracer-364216",
+    "storage_bucket": "geotracer-364216.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850287877102:android:46a4a2eb7abf91df064cff",
+        "android_client_info": {
+          "package_name": "de.sk.geotracer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850287877102-vf0t91gbtuc3fb4ge2gjd5i9ot70sc26.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDttSFdgWmO2p1pMGbBJyTngIXVD9w_rIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850287877102-vf0t91gbtuc3fb4ge2gjd5i9ot70sc26.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
