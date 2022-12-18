@@ -15,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.snackbar.Snackbar;
 
 import de.sk.geotracer.databinding.ActivityMainBinding;
+import de.sk.geotracer.maps.MapsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,9 +37,16 @@ public class MainActivity extends AppCompatActivity {
 
         binding.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+    }
 
-        View viewById = findViewById(R.id.button_bestlist);
-        viewById.setOnClickListener(view -> startActivity(new Intent(this, BestList.class)));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        View bestListButton = findViewById(R.id.button_bestlist);
+        bestListButton.setOnClickListener(view -> startActivity(new Intent(this, BestList.class)));
+
+        View mapButton = findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(view -> startActivity(new Intent(this, MapsActivity.class)));
     }
 
     @Override
