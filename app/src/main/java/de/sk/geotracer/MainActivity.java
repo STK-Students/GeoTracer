@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         View mapButton = findViewById(R.id.mapButton);
         mapButton.setOnClickListener(view -> startActivity(new Intent(this, MapsActivity.class)));
+
+        View loginButton = findViewById(R.id.btnOpenLogin);
+        loginButton.setOnClickListener(view -> startActivity(new Intent(this, LoginActivity.class)));
     }
 
     @Override

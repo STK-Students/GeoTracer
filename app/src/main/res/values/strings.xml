@@ -13,4 +13,5 @@
     <string name="geoTracer">GeoTracer</string>
     <string name="startButton">Start</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>
