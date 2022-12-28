@@ -1,16 +1,21 @@
 package de.sk.geotracer.maps;
 
 import android.os.Bundle;
+import android.os.Looper;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Granularity;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
+import de.sk.geotracer.LocationListener;
 import de.sk.geotracer.R;
 import de.sk.geotracer.databinding.ActivityMapsBinding;
 
@@ -18,6 +23,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    private FusedLocationProviderClient locationProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        locationProvider = LocationServices.getFusedLocationProviderClient(this);
     }
 
     /**
@@ -43,11 +51,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(50.935173, 6.953101);
-        googleMap.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("Marker in Köln"));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(11));
+        LocationRequest request = new LocationRequest.Builder(10000)
+                .setGranularity(Granularity.GRANULARITY_FINE).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build();
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        locationProvider.requestLocationUpdates(request, new LocationListener(googleMap), Looper.getMainLooper());
     }
 }
