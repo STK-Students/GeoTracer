@@ -6,10 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".BestListView">
 
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageIcon" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/TextView"
+        android:gravity="center"
         android:text="Text">
     </TextView>
 
