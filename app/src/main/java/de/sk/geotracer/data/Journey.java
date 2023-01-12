@@ -19,4 +19,8 @@ public class Journey {
     public List<Trip> getPastTrips() {
         return pastTrips;
     }
+
+    public void addTrip(Trip trip) {
+        pastTrips.add(trip);
+    }
 }

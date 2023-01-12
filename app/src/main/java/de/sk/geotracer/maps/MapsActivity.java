@@ -2,6 +2,7 @@ package de.sk.geotracer.maps;
 
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.KeyEvent;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -17,6 +18,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import de.sk.geotracer.LocationListener;
 import de.sk.geotracer.R;
+import de.sk.geotracer.data.GlobalDataStore;
+import de.sk.geotracer.data.Journey;
+import de.sk.geotracer.data.Trip;
 import de.sk.geotracer.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -24,6 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private FusedLocationProviderClient locationProvider;
+    private LocationListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(11));
         LocationRequest request = new LocationRequest.Builder(10000)
                 .setGranularity(Granularity.GRANULARITY_FINE).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build();
+        listener = new LocationListener(googleMap);
+        locationProvider.requestLocationUpdates(request, listener, Looper.getMainLooper());
+    }
 
-        locationProvider.requestLocationUpdates(request, new LocationListener(googleMap), Looper.getMainLooper());
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Trip trip = listener.getTrip();
+            Journey journey = GlobalDataStore.journey;
+            journey.addTrip(trip);
+        }
+        return true;
     }
 }

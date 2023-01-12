@@ -1,7 +1,6 @@
 package de.sk.geotracer;
 
 import android.graphics.Color;
-import android.location.Location;
 
 import androidx.annotation.NonNull;
 
@@ -15,13 +14,20 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
+import de.sk.geotracer.data.Trip;
+
 public class LocationListener extends LocationCallback {
 
-    GoogleMap map;
-    Polyline route;
+    private final GoogleMap map;
+    private Polyline route;
+    private final Trip trip = new Trip();
 
     public LocationListener(GoogleMap map) {
         this.map = map;
+    }
+
+    public Trip getTrip() {
+        return trip;
     }
 
     @Override
@@ -37,5 +43,6 @@ public class LocationListener extends LocationCallback {
         } else {
             route = map.addPolyline(new PolylineOptions().add(position).color(Color.BLUE));
         }
+        trip.addTripLocation(position);
     }
 }
