@@ -1,5 +1,6 @@
 package de.sk.geotracer.maps;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.KeyEvent;
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import de.sk.geotracer.LocationListener;
+import de.sk.geotracer.LoginActivity;
+import de.sk.geotracer.MainActivity;
 import de.sk.geotracer.R;
 import de.sk.geotracer.data.GlobalDataStore;
 import de.sk.geotracer.data.Journey;
@@ -68,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Trip trip = listener.getTrip();
             Journey journey = GlobalDataStore.journey;
             journey.addTrip(trip);
+            startActivity(new Intent(this, MainActivity.class));
         }
         return true;
     }
