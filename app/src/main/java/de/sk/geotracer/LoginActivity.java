@@ -1,5 +1,4 @@
 package de.sk.geotracer;
-
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
@@ -11,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +28,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.sk.geotracer.databinding.ActivityLoginBinding;
 import de.sk.geotracer.maps.MapsActivity;
 
@@ -41,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -68,16 +72,30 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            System.out.println("Hauptseite");
+        }
+
+
+
         Button loginButton = (Button) findViewById(R.id.btnLogin);
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
                 TextView tvEmail = (TextView) findViewById(R.id.tvEmail);
                 TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
 
                 String emailText = tvEmail.getText().toString();
                 String passwordText = tvPassword.getText().toString();
+
+                //Test
+                Map<String, Object> city = new HashMap<>();
+                city.put("name", "Los Angeles");
+                city.put("state", "CA");
+                city.put("country", "USA");
 
                 System.out.println("Hello Login");
                 System.out.println(emailText);
@@ -91,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     System.out.println("Login erfolgreich");
+                                    db.collection("routes").document(user.getUid()).set(city);
                                 } else {
                                     Toast.makeText(LoginActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
