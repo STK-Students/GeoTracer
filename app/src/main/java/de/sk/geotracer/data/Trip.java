@@ -33,8 +33,10 @@ public class Trip {
         topSpeed = calcTopSpeed();
     }
 
-    public HashMap<Instant, LatLng> getTripLocations() {
-        return new HashMap<>(tripLocations);
+    public HashMap<String, LatLng> getTripLocations() {
+        HashMap<String, LatLng> convertedMap = new HashMap<>();
+        tripLocations.forEach((key, value) -> convertedMap.put(key.toString(), value));
+        return convertedMap;
     }
 
     /**
