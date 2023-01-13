@@ -37,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -69,8 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Trip trip = listener.getTrip();
-            Journey journey = GlobalDataStore.journey;
-            journey.addTrip(trip);
+            // add DB
             startActivity(new Intent(this, MainActivity.class));
         }
         return true;
