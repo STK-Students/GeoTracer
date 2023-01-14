@@ -2,31 +2,23 @@ package de.sk.geotracer;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import de.sk.geotracer.data.Trip;
 
@@ -43,10 +35,6 @@ public class BestList extends AppCompatActivity {
 
     //ListView
     ListView bestListView;
-    /**
-     * A map of all trips. The key {@link Instant} is the beginning of a route.
-     */
-    private HashMap<Instant, Trip> trips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +44,7 @@ public class BestList extends AppCompatActivity {
         //Lokalisieren der ListView
         bestListView = findViewById(R.id.bestListView);
 
-        trips = getTripItems();
+        loadData();
 
         CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), listPlatz, listImages);
         bestListView.setAdapter(customBaseAdapter);
@@ -67,25 +55,37 @@ public class BestList extends AppCompatActivity {
         */
     }
 
-    protected HashMap<Instant, Trip> getTripItems() {
-        HashMap<Instant, Trip> allTrips = new HashMap<>();
-        db.collection(user.getUid()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    HashMap<Instant, LatLng> routePoints = new HashMap<>();
-                    Map<String, Object> locations = document.getData();
-                    locations.forEach((key, value) -> {
-                        HashMap<String, Double> latLng = (HashMap<String, Double>) value;
-                        double latitude = latLng.get("latitude");
-                        double longitude = latLng.get("longitude");
-                        routePoints.put(Instant.parse(key), new LatLng(latitude, longitude));
-                    });
-                    allTrips.put(Instant.parse(document.getId()), new Trip(routePoints));
-                }
-            } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
-            }
+    /**
+     * Loads the data from the cloud. Then passes it on to the handler methods.
+     */
+    private void loadData() {
+        db.collection(user.getUid()).get().addOnSuccessListener((result) -> {
+            TreeMap<Instant, Trip> trips = buildTripData(result);
+            runUILogic(trips);
         });
+    }
+
+    /**
+     * Deserializes the data from the cloud into trips.
+     * @param result a database snapshot
+     * @return A hashmap containing all trips
+     */
+    private TreeMap<Instant, Trip> buildTripData(QuerySnapshot result) {
+        TreeMap<Instant, Trip> allTrips = new TreeMap<>();
+        for (QueryDocumentSnapshot document : result) {
+            TreeMap<Instant, LatLng> routePoints = new TreeMap<>();
+            Map<String, Object> locations = document.getData();
+            locations.forEach((key, value) -> {
+                HashMap<String, Double> latLng = (HashMap<String, Double>) value;
+                routePoints.put(Instant.parse(key), new LatLng(latLng.get("latitude"), latLng.get("longitude")));
+            });
+            allTrips.put(Instant.parse(document.getId()), new Trip(routePoints));
+        }
         return allTrips;
+    }
+
+    private void runUILogic(Map<Instant, Trip> trips) {
+        trips.forEach((key, value) -> Log.i(TAG, "" + value.getTopSpeed()));
+        //Run your code to show trips in the UI here.
     }
 }
