@@ -33,7 +33,7 @@ import de.sk.geotracer.data.Trip;
 
 public class BestList extends AppCompatActivity {
 
-    //Parameter, die in der Bestenliste angezeigt werden soll.
+    //Parameter, die in der Bestenliste angezeigt werden sollen.
     String listPlatz[] = {"platz 1", "platz 2", "platz 3"};
     //Bilder, die in der Bestenliste angezeigt werden sollen.
     int listImages[] = {R.drawable.platz1, R.drawable.platz2, R.drawable.platz3};
