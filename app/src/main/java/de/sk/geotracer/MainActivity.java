@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import de.sk.geotracer.databinding.ActivityMainBinding;
 import de.sk.geotracer.maps.MapsActivity;
@@ -32,20 +37,54 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
         View bestListButton = findViewById(R.id.button_bestlist);
-        bestListButton.setOnClickListener(view -> startActivity(new Intent(this, BestList.class)));
+        bestListButton.setOnClickListener(view -> {
+            if(user == null){
+                Toast.makeText(MainActivity.this, "Kein User angemeldet!", Toast.LENGTH_SHORT).show();
+            } else {
+                startActivity(new Intent(this, BestList.class));
+            }
+        });
 
         View mapButton = findViewById(R.id.mapButton);
-        mapButton.setOnClickListener(view -> startActivity(new Intent(this, MapsActivity.class)));
+        mapButton.setOnClickListener(view -> {
+            if(user == null){
+                Toast.makeText(MainActivity.this, "Kein User angemeldet!", Toast.LENGTH_SHORT).show();
+            } else {
+                startActivity(new Intent(this, MapsActivity.class));
+            }
+        });
 
-        View loginButton = findViewById(R.id.btnOpenLogin);
-        loginButton.setOnClickListener(view -> startActivity(new Intent(this, LoginActivity.class)));
+        Button loginButton = (Button)findViewById(R.id.btnOpenLogin);
+        loginButton.setOnClickListener(view -> {
+            mAuth.signOut();
+            startActivity(new Intent(this, LoginActivity.class));
+        });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Boolean loginValue = extras.getBoolean("login");
+            if (loginValue) {
+                loginButton.setText("Logout");
+            } else {
+                loginButton.setText("Login");
+            }
+        } else {
+            if(user == null){
+                loginButton.setText("Login");
+            } else {
+                loginButton.setText("Logout");
+            }
+        }
     }
 
     @Override

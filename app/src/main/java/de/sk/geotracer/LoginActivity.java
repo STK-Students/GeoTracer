@@ -13,6 +13,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import de.sk.geotracer.databinding.ActivityLoginBinding;
 
@@ -40,11 +42,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        Button loginButton = (Button) findViewById(R.id.btnLogin);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Button loginButton = findViewById(R.id.btnLogin);
         loginButton.setOnClickListener(view -> {
-            TextView tvEmail = (TextView) findViewById(R.id.tvEmail);
-            TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
+            TextView tvEmail = findViewById(R.id.tvEmail);
+            TextView tvPassword = findViewById(R.id.tvPassword);
 
             String emailText = tvEmail.getText().toString();
             String passwordText = tvPassword.getText().toString();
@@ -52,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(LoginActivity.this, task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Login erfolgreich!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(this, MainActivity.class));
+                    Intent i = new Intent(this, MainActivity.class);
+                    i.putExtra("login", true);
+                    startActivity(i);
                 } else {
                     Toast.makeText(LoginActivity.this, "Login fehlgeschlagen.", Toast.LENGTH_SHORT).show();
                 }
