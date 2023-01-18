@@ -12,8 +12,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import de.sk.geotracer.databinding.ActivityMainBinding;
 import de.sk.geotracer.maps.MapsActivity;
 
