@@ -8,23 +8,29 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class CustomBaseAdapter extends BaseAdapter {
 
     Context context;
-    String listPlatz[];
-    int listImages[];
+    List<String> description;
+    List<Integer> images;
     LayoutInflater inflater;
 
-    public CustomBaseAdapter(Context ctx, String [] platzList, int [] images){
+    public CustomBaseAdapter(Context ctx, List<String> descriptions, List<Integer> images) {
         this.context = ctx;
-        this.listPlatz = platzList;
-        this.listImages = images;
+        this.description = descriptions;
+        this.images = images;
         inflater = LayoutInflater.from(ctx);
+    }
+
+    public void setDescription(List<String> description) {
+        this.description = description;
     }
 
     @Override
     public int getCount() {
-        return listPlatz.length;
+        return description.size();
     }
 
     @Override
@@ -42,8 +48,8 @@ public class CustomBaseAdapter extends BaseAdapter {
         convertView = inflater.inflate(R.layout.activity_best_list_view, null);
         TextView txtView = (TextView) convertView.findViewById(R.id.TextView);
         ImageView listImg = (ImageView) convertView.findViewById(R.id.imageIcon);
-        txtView.setText(listPlatz[position]);
-        listImg.setImageResource(listImages[position]);
+        txtView.setText(description.get(position));
+        listImg.setImageResource(images.get(position));
         return convertView;
     }
 }

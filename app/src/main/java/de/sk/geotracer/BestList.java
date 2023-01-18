@@ -16,7 +16,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -25,15 +27,24 @@ import de.sk.geotracer.data.Trip;
 
 public class BestList extends AppCompatActivity {
 
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseUser user = mAuth.getCurrentUser();
+    private static final List<Integer> IMAGES = List.of(R.drawable.platz1, R.drawable.platz2, R.drawable.platz3);
+    private static final List<String> DESCRIPTION = List.of("Bester Schnitt", "Zweitbester Schnitt", "Drittbester Schnitt");
+    private CustomBaseAdapter adapter;
+
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseUser user = mAuth.getCurrentUser();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_best_list);
+        ListView listView = findViewById(R.id.bestListView);
+        adapter = new CustomBaseAdapter(getApplicationContext(), DESCRIPTION, IMAGES);
+        listView.setAdapter(adapter);
 
+        loadData();
     }
 
     /**
@@ -48,6 +59,7 @@ public class BestList extends AppCompatActivity {
 
     /**
      * Deserializes the data from the cloud into trips.
+     *
      * @param result a database snapshot
      * @return A hashmap containing all trips
      */
@@ -67,40 +79,11 @@ public class BestList extends AppCompatActivity {
 
 
     private void runUILogic(Map<Instant, Trip> trips) {
-        trips.forEach((key, value) -> Log.i(TAG, "" + value.getTopSpeed()));
-        //Run your code to show trips in the UI here.
-
-
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        for (Map.Entry<Instant, Trip> instantTripEntry : trips.entrySet()) {
-            instantTripEntry.getValue().getTopSpeed();
+        List<String> descriptions = new ArrayList<>();
+        for (Map.Entry<Instant, Trip> trip : trips.entrySet()) {
+            descriptions.add(String.valueOf(trip.getValue().getAverageSpeed()));
         }
-
-
-
-
-        //ListView in der die Besten Liste angezeigt wird.
-        ListView bestListView;
-
-
-        //Parameter, die in der Bestenliste angezeigt werden sollen.
-        String listPlatz[] = {"platz1", "platz2", "platz3"};
-
-
-
-        //Bilder, die in der Bestenliste angezeigt werden sollen.
-        int listImages[] = {R.drawable.platz1, R.drawable.platz2, R.drawable.platz3};
-
-        //Locate the ListView
-        bestListView = findViewById(R.id.bestListView);
-
-        loadData();
-
-        //Erstellen eines CustomBaseAdapters
-        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), listPlatz, listImages);
-        customBaseAdapter.notifyDataSetChanged();
-        //Füllen der ListView
-        bestListView.setAdapter(customBaseAdapter);
-        bestListView.refreshDrawableState();
+        adapter.setDescription(descriptions);
+        adapter.notifyDataSetChanged();
     }
 }
