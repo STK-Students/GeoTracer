@@ -18,4 +18,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.515" />
 
+    <EditText
+        android:id="@+id/BestDurchschnitt"
+        android:layout_width="379dp"
+        android:layout_height="54dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Beste Durchschnittsgeschwindigkeit"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/bestListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.869" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
