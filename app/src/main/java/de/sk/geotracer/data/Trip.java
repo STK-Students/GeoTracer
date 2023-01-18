@@ -16,7 +16,7 @@ import java.util.TreeMap;
 /**
  * An individual trip based on a journey.
  */
-public class Trip {
+public class Trip implements Comparable {
 
     /**
      * This list contains the path the user traveled to get to their destination.
@@ -111,5 +111,16 @@ public class Trip {
             tmp.append(entry.getKey()).append(entry.getValue());
         }
         return tmp.toString();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Trip otherTrip = (Trip) o;
+        if (otherTrip.getAverageSpeed() < this.getAverageSpeed()) {
+            return 1;
+        } else if (otherTrip.getAverageSpeed() > this.getAverageSpeed()) {
+            return -1;
+        }
+        return 0;
     }
 }
