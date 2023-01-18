@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -61,8 +62,9 @@ public class Trip implements Comparable {
         return topSpeed;
     }
 
-    private float calcAverageSpeed() {
-        return (float) (Math.random() * 16);
+    private Float calcAverageSpeed() {
+        Float speed = (float) (Math.random() * 16);
+        return Float.valueOf(new DecimalFormat("0.0").format(speed));
     }
 
     private float calcTopSpeed() {

@@ -49,7 +49,13 @@ public class CustomBaseAdapter extends BaseAdapter {
         TextView txtView = (TextView) convertView.findViewById(R.id.TextView);
         ImageView listImg = (ImageView) convertView.findViewById(R.id.imageIcon);
         txtView.setText(description.get(position));
-        listImg.setImageResource(images.get(position));
+        if (position == 0 ||position == 1|| position == 2) {
+            listImg.setImageResource(images.get(position));
+        } else if (position == getCount() -1) {
+            listImg.setImageResource(images.get(images.size() -1));
+        } else {
+            listImg.setImageResource(images.get(3));
+        }
         return convertView;
     }
 }

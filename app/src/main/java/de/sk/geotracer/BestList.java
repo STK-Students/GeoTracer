@@ -16,25 +16,35 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.chrono.Chronology;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import de.sk.geotracer.data.Trip;
 
 
 public class BestList extends AppCompatActivity {
 
-    private static final List<Integer> IMAGES = List.of(R.drawable.platz1, R.drawable.platz2, R.drawable.platz3);
+    private static final List<Integer> IMAGES = List.of(R.drawable.platz1, R.drawable.platz2, R.drawable.platz3, R.drawable.racebike, R.drawable.letzter);
     private static final List<String> DESCRIPTION = List.of("Bester Schnitt", "Zweitbester Schnitt", "Drittbester Schnitt");
     private CustomBaseAdapter adapter;
 
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseUser user = mAuth.getCurrentUser();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +89,18 @@ public class BestList extends AppCompatActivity {
 
 
     private void runUILogic(Map<Instant, Trip> trips) {
-        List<String> descriptions = new ArrayList<>();
-        for (Map.Entry<Instant, Trip> trip : trips.entrySet()) {
-            descriptions.add(String.valueOf(trip.getValue().getAverageSpeed()));
+        List<Trip> sortedTrips = new ArrayList<>(trips.values());
+        Collections.sort(sortedTrips);
+        Collections.reverse(sortedTrips);
+        SortedSet<Map.Entry<Instant, Trip>> sortedMap = Util.sortEntriesByValue(trips);
+
+        List<String> description = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy hh:mm").withZone(ZoneId.systemDefault());
+        for (Map.Entry<Instant, Trip> entry : sortedMap) {
+            String timestamp = formatter.format(entry.getKey());
+            description.add(entry.getValue().getAverageSpeed() + "km/h\nFahrt vom " + timestamp);
         }
-        adapter.setDescription(descriptions);
+        adapter.setDescription(description);
         adapter.notifyDataSetChanged();
     }
 }
