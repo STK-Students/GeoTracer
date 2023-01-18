@@ -25,34 +25,15 @@ import de.sk.geotracer.data.Trip;
 
 public class BestList extends AppCompatActivity {
 
-    //Parameter, die in der Bestenliste angezeigt werden sollen.
-    String listPlatz[] = {"platz 1", "platz 2", "platz 3"};
-    //Bilder, die in der Bestenliste angezeigt werden sollen.
-    int listImages[] = {R.drawable.platz1, R.drawable.platz2, R.drawable.platz3};
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
 
-    //ListView
-    ListView bestListView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_best_list);
-        //Lokalisieren der ListView
-        bestListView = findViewById(R.id.bestListView);
 
-        loadData();
-
-        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), listPlatz, listImages);
-        bestListView.setAdapter(customBaseAdapter);
-
-        /*Erstellen des Adapters für die Parameterübergabe
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_best_list_view, R.id.TextView, listPlatz);
-        bestListView.setAdapter(arrayAdapter);
-        */
     }
 
     /**
@@ -84,8 +65,42 @@ public class BestList extends AppCompatActivity {
         return allTrips;
     }
 
+
     private void runUILogic(Map<Instant, Trip> trips) {
         trips.forEach((key, value) -> Log.i(TAG, "" + value.getTopSpeed()));
         //Run your code to show trips in the UI here.
+
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        for (Map.Entry<Instant, Trip> instantTripEntry : trips.entrySet()) {
+            instantTripEntry.getValue().getTopSpeed();
+        }
+
+
+
+
+        //ListView in der die Besten Liste angezeigt wird.
+        ListView bestListView;
+
+
+        //Parameter, die in der Bestenliste angezeigt werden sollen.
+        String listPlatz[] = {"platz1", "platz2", "platz3"};
+
+
+
+        //Bilder, die in der Bestenliste angezeigt werden sollen.
+        int listImages[] = {R.drawable.platz1, R.drawable.platz2, R.drawable.platz3};
+
+        //Locate the ListView
+        bestListView = findViewById(R.id.bestListView);
+
+        loadData();
+
+        //Erstellen eines CustomBaseAdapters
+        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), listPlatz, listImages);
+        customBaseAdapter.notifyDataSetChanged();
+        //Füllen der ListView
+        bestListView.setAdapter(customBaseAdapter);
+        bestListView.refreshDrawableState();
     }
 }
